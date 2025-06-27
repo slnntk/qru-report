@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 :root {
     --bg: #F8F9FA;
     --bg-soft: #FFFFFF;
@@ -31,8 +33,6 @@
     --secondary-text: #EAEAEA;
     --secondary-hover-bg: #404040;
 }
-
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 * {
     margin: 0;
