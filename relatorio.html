@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ferramenta de Relatório e Pena</title>
+  <!-- Ícones Font Awesome -->
+  <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+  <!-- Link para o CSS específico desta página -->
+  <link rel="stylesheet" href="relatorio.css" />
+</head>
+<body>
+<!-- Sidebar (Menu Lateral) -->
+<nav id="sidebar">
+  <div id="sidebar_content">
+    <div id="user">
+      <img
+              src="https://paradisebpm.vercel.app/src/images/bpm.png"
+              id="user_avatar"
+              alt="Avatar"
+      />
+      <p id="user_infos">
+        <span class="item-description">1° BPM-AP</span>
+        <span class="item-description">Ferramentas</span>
+      </p>
+    </div>
+    <ul id="side_items">
+      <li class="side-item active">
+        <a href="#">
+          <i class="fa-solid fa-gavel"></i>
+          <span class="item-description">Relatório & Pena</span>
+        </a>
+      </li>
+      <li class="side-item">
+        <a href="comunicacao.html">
+          <i class="fa-solid fa-headset"></i>
+          <span class="item-description">Comunicação</span>
+        </a>
+      </li>
+    </ul>
+    <button id="open_btn" aria-label="Abrir/Fechar menu lateral">
+      <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- Conteúdo Principal -->
+<main>
+  <div class="content-wrapper">
+    <div class="tool-container">
+      <div class="tool-header">
+        <img src="https://paradisebpm.vercel.app/src/images/bpm.png" alt="Emblema 1º BPM" class="header-emblem">
+        <div class="header-text">
+          <h1>Gerador de Relatório e Calculadora de Pena</h1>
+          <p>Preencha os campos abaixo para gerar o relatório e calcular a pena simultaneamente.</p>
+        </div>
+      </div>
+
+      <form id="unified-form">
+        <h2 class="form-section-title">Detalhes da Ocorrência</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="qru_type">Tipo de QRU</label>
+            <input type="text" id="qru_type" placeholder="Ex: Roubo a banco" />
+          </div>
+          <div class="form-group autocomplete-wrapper">
+            <label for="qru_location_start">Início da QRU</label>
+            <input type="text" id="qru_location_start" placeholder="Digite para buscar um local..." autocomplete="off" />
+            <div class="autocomplete-suggestions"></div>
+          </div>
+          <div class="form-group">
+            <label for="suspect_vehicle">Veículo do Indivíduo</label>
+            <input type="text" id="suspect_vehicle" placeholder="Ex: Sultan RS" />
+          </div>
+          <div class="form-group autocomplete-wrapper">
+            <label for="qru_location_end">Local da Prisão</label>
+            <input type="text" id="qru_location_end" placeholder="Digite para buscar um local..." autocomplete="off" />
+            <div class="autocomplete-suggestions"></div>
+          </div>
+        </div>
+
+        <h2 class="form-section-title">Infrações e Quantidades</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="ferramentas">Ferramentas Ilícitas</label>
+            <input type="number" id="ferramentas" value="0" min="0" />
+            <small class="input-hint">+10 meses por item</small>
+          </div>
+          <div class="form-group">
+            <label for="entorpecentes">Entorpecentes</label>
+            <input type="number" id="entorpecentes" value="0" min="0" />
+            <small class="input-hint">+15 meses base, +0.5 por item</small>
+          </div>
+          <div class="form-group">
+            <label for="municao">Munição Ilegal</label>
+            <input type="number" id="municao" value="0" min="0" />
+            <small class="input-hint">+15 meses, +5 a cada 20</small>
+          </div>
+          <div class="form-group">
+            <label for="dinheiro">Dinheiro Ilícito</label>
+            <input type="number" id="dinheiro" value="0" min="0" />
+            <small class="input-hint">+10 meses, +1 a cada $1000</small>
+          </div>
+          <div class="form-group">
+            <label for="produtos">Produtos Roubados</label>
+            <input type="number" id="produtos" value="0" min="0" />
+            <small class="input-hint">+10 meses, +2 por item extra</small>
+          </div>
+          <div class="form-group">
+            <label for="multas">Multas Pendentes</label>
+            <input type="number" id="multas" value="0" min="0" />
+            <small class="input-hint">+10 meses, +1 a cada $1000</small>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button type="button" id="clear-form-btn" class="secondary-button">
+            <i class="fa-solid fa-eraser"></i> Limpar Formulário
+          </button>
+          <button type="submit" class="cta-button">
+            <i class="fa-solid fa-bolt"></i> Gerar e Calcular
+          </button>
+        </div>
+      </form>
+
+      <div id="results-area" class="results-area" style="display: none;">
+        <div class="tabs">
+          <button class="tab-button active" data-tab="tab-relatorio">Relatório</button>
+          <button class="tab-button" data-tab="tab-detalhamento">Detalhamento da Pena</button>
+        </div>
+        <div class="tab-content active" id="tab-relatorio">
+          <pre id="relato-output"></pre>
+          <button id="copy-report-btn" class="copy-button" title="Copiar Relatório">
+            <i class="fa-regular fa-copy"></i>
+          </button>
+        </div>
+        <div class="tab-content" id="tab-detalhamento">
+          <div id="pena-detalhada-output"></div>
+          <div class="linha-total">
+            <span>Pena Total:</span>
+            <span id="pena-total-output"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RODAPÉ DE CRÉDITOS -->
+  <div class="credits-footer">
+    <img src="https://avatars.githubusercontent.com/u/101597036?v=4" alt="Avatar de Tiago Holanda">
+    <p>Desenvolvido por <span>Tiago Holanda</span></p>
+  </div>
+</main>
+
+
+<button id="toggle-dark">🌓</button>
+<script src="relatorio.js"></script>
+</body>
+</html>

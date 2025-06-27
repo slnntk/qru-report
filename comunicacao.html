@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comunicação e Modulação - 1º BPM-AP</title>
+  <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+  <link rel="stylesheet" href="comunicacao.css" />
+</head>
+<body>
+<!-- Sidebar (Menu Lateral) -->
+<nav id="sidebar">
+  <div id="sidebar_content">
+    <div id="user">
+      <img
+              src="https://paradisebpm.vercel.app/src/images/bpm.png"
+              id="user_avatar"
+              alt="Avatar"
+      />
+      <p id="user_infos">
+        <span class="item-description">1° BPM-AP</span>
+        <span class="item-description">Ferramentas</span>
+      </p>
+    </div>
+    <ul id="side_items">
+      <li class="side-item">
+        <a href="relatorio.html">
+          <i class="fa-solid fa-gavel"></i>
+          <span class="item-description">Relatório & Pena</span>
+        </a>
+      </li>
+      <li class="side-item active">
+        <a href="#">
+          <i class="fa-solid fa-headset"></i>
+          <span class="item-description">Comunicação</span>
+        </a>
+      </li>
+    </ul>
+    <button id="open_btn" aria-label="Abrir/Fechar menu lateral">
+      <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- Conteúdo Principal -->
+<main>
+  <div class="content-wrapper">
+    <!-- Seção de Configuração do Oficial -->
+    <div class="tool-container">
+      <div class="tool-header">
+        <img src="https://paradisebpm.vercel.app/src/images/bpm.png" alt="Emblema 1º BPM" class="header-emblem">
+        <div class="header-text">
+          <h1>Configuração do Oficial</h1>
+          <p>Insira seus dados para preencher os modelos automaticamente.</p>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="user-nome">Seu Nome (com Patente)</label>
+          <input type="text" id="user-nome" placeholder="Ex: SGT Tiago Holanda" value="AL Tiago Holanda" />
+        </div>
+        <div class="form-group">
+          <label for="user-badge">Sua Badge (#)</label>
+          <input type="number" id="user-badge" placeholder="Ex: 605" value="605" />
+        </div>
+        <div class="form-group">
+          <label for="user-passaporte">Seu Passaporte</label>
+          <input type="number" id="user-passaporte" placeholder="Ex: 1899" value="1899" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção de Início de Serviço (COD 0) -->
+    <div class="tool-container">
+      <div class="tool-header">
+        <h2>Início de Patrulhamento (COD 0)</h2>
+      </div>
+      <div class="form-group">
+        <label for="cod0-viatura">Viatura</label>
+        <input type="text" id="cod0-viatura" placeholder="Ex: SPEED-911" />
+      </div>
+
+      <h3 class="form-section-title">Tripulação (será ordenada da maior patente para a menor)</h3>
+      <div id="tripulacao-list">
+        <!-- Oficiais serão adicionados aqui dinamicamente -->
+      </div>
+
+      <div class="button-group">
+        <button id="add-oficial-btn" class="secondary-button"><i class="fa-solid fa-user-plus"></i> Adicionar Oficial</button>
+      </div>
+
+      <button id="gerar-cod0-btn" class="cta-button"><i class="fa-solid fa-play"></i> Gerar Mensagem de Início</button>
+
+      <div id="cod0-results" class="results-area" style="display: none;">
+        <pre id="cod0-output"></pre>
+        <button class="copy-button" data-copy-target="cod0-output" title="Copiar Mensagem">
+          <i class="fa-regular fa-copy"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Guia de Comunicação -->
+    <div class="tool-container">
+      <div class="tool-header">
+        <h1>Guia de Comunicação</h1>
+        <p>Clique em uma seção para expandir e ver os modelos.</p>
+      </div>
+      <div class="accordion">
+        <!-- Item 1: Rádio -->
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <span><i class="fa-solid fa-radio"></i> Rádio</span>
+            <i class="fa-solid fa-chevron-down icon"></i>
+          </button>
+          <div class="accordion-content">
+            <p><strong>Normas:</strong> Evite modular sobre outros, seja direto e claro, sem linguagem inadequada.</p>
+            <div class="template">
+              <pre id="template-radio"></pre>
+              <button class="copy-button" data-copy-target="template-radio" title="Copiar Modelo">
+                <i class="fa-regular fa-copy"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Item 2: CP (Chat Policial) (ESTRUTURA ATUALIZADA) -->
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <span><i class="fa-solid fa-comments"></i> CP (Chat Policial)</span>
+            <i class="fa-solid fa-chevron-down icon"></i>
+          </button>
+          <div class="accordion-content">
+            <p><strong>Uso:</strong> Solicitar vaga em patrulha ou informações sobre ocorrências.</p>
+
+            <div class="comms-example" style="padding-left: 0; margin-bottom: 1.5rem;">
+              <h4>Exemplo 1: Solicitar Vaga</h4>
+              <div class="template">
+                <pre id="template-cp-vaga"></pre>
+                <button class="copy-button" data-copy-target="template-cp-vaga" title="Copiar Modelo">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="comms-example" style="padding-left: 0;">
+              <h4>Exemplo 2: Solicitar B.O.</h4>
+              <div class="form-group">
+                <label for="cp-bo-veiculo">Veículo</label>
+                <input type="text" id="cp-bo-veiculo" placeholder="Digite o modelo do veículo...">
+              </div>
+              <div class="results-area">
+                <pre id="template-cp-bo"></pre>
+                <button class="copy-button" data-copy-target="template-cp-bo" title="Copiar Modelo">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 3: Chamados (ESTRUTURA ATUALIZADA PARA AUTOCOMPLETE) -->
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <span><i class="fa-solid fa-bullhorn"></i> Chamados</span>
+            <i class="fa-solid fa-chevron-down icon"></i>
+          </button>
+          <div class="accordion-content">
+            <div class="sub-tabs">
+              <button class="sub-tab-button active" data-tab="mecanica-tab">
+                <i class="fa-solid fa-wrench"></i> Mecânica
+              </button>
+              <button class="sub-tab-button" data-tab="hospital-tab">
+                <i class="fa-solid fa-hospital"></i> Hospital
+              </button>
+            </div>
+            <!-- Aba Mecânica -->
+            <div id="mecanica-tab" class="sub-tab-content active">
+              <div class="form-group autocomplete-wrapper">
+                <label for="mecanica-qth">QTH (Localização)</label>
+                <input type="text" id="mecanica-qth" placeholder="Digite para buscar um local..." autocomplete="off">
+                <div class="autocomplete-suggestions"></div>
+              </div>
+              <div class="results-area">
+                <pre id="mecanica-output"></pre>
+                <button class="copy-button" data-copy-target="mecanica-output" title="Copiar Chamado">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>
+            </div>
+            <!-- Aba Hospital -->
+            <div id="hospital-tab" class="sub-tab-content">
+              <div class="form-group autocomplete-wrapper">
+                <label for="hospital-qth">QTH (Localização)</label>
+                <input type="text" id="hospital-qth" placeholder="Digite para buscar um local..." autocomplete="off">
+                <div class="autocomplete-suggestions"></div>
+              </div>
+              <div class="form-group">
+                <label for="hospital-ocorrencia">Tipo de Ocorrência</label>
+                <input type="text" id="hospital-ocorrencia" placeholder="Digite a ocorrência...">
+              </div>
+              <div class="results-area">
+                <pre id="hospital-output"></pre>
+                <button class="copy-button" data-copy-target="hospital-output" title="Copiar Chamado">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Item 4: Demais Meios de Comunicação (DESCRIÇÕES ATUALIZADAS) -->
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <span><i class="fa-solid fa-satellite-dish"></i> Demais Meios de Comunicação</span>
+            <i class="fa-solid fa-chevron-down icon"></i>
+          </button>
+          <div class="accordion-content">
+            <!-- Canal /911 -->
+            <div class="comms-channel">
+              <h3 class="comms-channel-title"><i class="fa-solid fa-mobile-screen-button"></i> /911 (Civis)</h3>
+              <p class="comms-channel-description">
+                Canal utilizado para nos comunicarmos com os civis através de texto. Em nosso procedimento para aplicar multas nos veículos abandonados pela cidade, precisamos e devemos contatar o cidadão três vezes através /911 antes de realizar o procedimento.
+              </p>
+
+              <div class="comms-example">
+                <h4>Exemplo 1: Contato Inicial</h4>
+                <div class="form-group">
+                  <label for="911-nome-civil">Nome do Civil</label>
+                  <input type="text" id="911-nome-civil" placeholder="Digite o nome do civil...">
+                </div>
+                <div class="results-area">
+                  <pre id="911-1-output"></pre>
+                  <button class="copy-button" data-copy-target="911-1-output" title="Copiar Mensagem">
+                    <i class="fa-regular fa-copy"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="comms-example">
+                <h4>Exemplo 2: Veículo Irregular</h4>
+                <div class="form-group autocomplete-wrapper">
+                  <label for="911-local">Local do Veículo</label>
+                  <input type="text" id="911-local" placeholder="Digite para buscar um local..." autocomplete="off">
+                  <div class="autocomplete-suggestions"></div>
+                </div>
+                <div class="results-area">
+                  <pre id="911-2-output"></pre>
+                  <button class="copy-button" data-copy-target="911-2-output" title="Copiar Mensagem">
+                    <i class="fa-regular fa-copy"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Canal /112 -->
+            <div class="comms-channel">
+              <h3 class="comms-channel-title"><i class="fa-solid fa-kit-medical"></i> /112 (Médicos)</h3>
+              <p class="comms-channel-description">
+                Canal utilizado para nos comunicarmos com os médicos através de texto. Antes de realizarmos qualquer procedimento de reanimação, devemos contatar os médicos para saber se os mesmos estão disponíveis para auxiliar ou se estamos autorizados a realizar o procedimento.
+              </p>
+              <div class="comms-example">
+                <h4>Exemplo: Solicitação de Permissão</h4>
+                <div class="template">
+                  <pre id="template-112">Os oficiais estão autorizados a realizar os primeiros socorros?</pre>
+                  <button class="copy-button" data-copy-target="template-112" title="Copiar Modelo">
+                    <i class="fa-regular fa-copy"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- RODAPÉ DE CRÉDITOS -->
+  <div class="credits-footer">
+    <img src="https://avatars.githubusercontent.com/u/101597036?v=4" alt="Avatar de Tiago Holanda">
+    <p>Desenvolvido por <span>Tiago Holanda</span></p>
+  </div>
+</main>
+
+<button id="toggle-dark">🌓</button>
+<script src="comunicacao.js"></script>
+</body>
+</html>
