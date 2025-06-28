@@ -9,6 +9,36 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
   />
   <link rel="stylesheet" href="comunicacao.css" />
+  <style>
+    .icon-selectors { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
+    .icon-selector {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      width: 105px; height: 100px; border: 2px solid var(--box-border);
+      border-radius: 8px; cursor: pointer; text-align: center; padding: 5px;
+      transition: all 0.2s ease-in-out;
+    }
+    .icon-selector img {
+      width: 40px; /* Tamanho da imagem */
+      height: 40px;
+      object-fit: contain; /* Garante que a imagem não distorça */
+      margin-bottom: 0.5rem;
+    }
+    .icon-selector span { font-size: 0.75rem; font-weight: 500; line-height: 1.2; }
+    .icon-selector:hover { border-color: var(--highlight); background-color: var(--highlight-soft); }
+    .icon-selector.active {
+      border-color: var(--highlight); background-color: var(--highlight-soft);
+      box-shadow: 0 0 10px -2px var(--highlight);
+      transform: translateY(-2px); /* Efeito de elevação */
+    }
+    /* Container para os seletores de cargo que serão gerados dinamicamente */
+    #cargo-selectors-container {
+      margin-top: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .cargo-selector-wrapper { display: none; } /* Escondido por padrão */
+  </style>
 </head>
 <body>
 <!-- Sidebar (Menu Lateral) -->
@@ -51,53 +81,85 @@
     <!-- Seção de Configuração do Oficial -->
     <div class="tool-container">
       <div class="tool-header">
-        <img src="https://paradisebpm.vercel.app/src/images/bpm.png" alt="Emblema 1º BPM" class="header-emblem">
-        <div class="header-text">
-          <h1>Configuração do Oficial</h1>
-          <p>Insira seus dados para preencher os modelos automaticamente.</p>
-        </div>
+        <img src="src/assets/EMBLEMA POLICIA.png" alt="Emblema 1º BPM" class="header-emblem">
+        <h1>Configuração do Oficial</h1>
+        <p>Insira seus dados e selecione suas funções. Suas escolhas ficam salvas.</p>
       </div>
       <div class="form-grid">
-        <div class="form-group">
-          <label for="user-nome">Seu Nome (com Patente)</label>
-          <input type="text" id="user-nome" placeholder="Ex: SGT Tiago Holanda" value="AL Tiago Holanda" />
-        </div>
-        <div class="form-group">
-          <label for="user-badge">Sua Badge (#)</label>
-          <input type="number" id="user-badge" placeholder="Ex: 605" value="605" />
-        </div>
-        <div class="form-group">
-          <label for="user-passaporte">Seu Passaporte</label>
-          <input type="number" id="user-passaporte" placeholder="Ex: 1899" value="1899" />
-        </div>
+        <div class="form-group"><label for="user-nome">Seu Nome (com Patente)</label><input type="text" id="user-nome" placeholder="Ex: SGT Tiago Holanda" /></div>
+        <div class="form-group"><label for="user-badge">Sua Badge (#)</label><input type="number" id="user-badge" placeholder="Ex: 605" /></div>
+        <div class="form-group"><label for="user-passaporte">Seu Passaporte</label><input type="number" id="user-passaporte" placeholder="Ex: 1899" /></div>
       </div>
+
+      <h3 class="form-section-title">Funções e Grupamentos</h3>
+      <div class="icon-selectors">
+        <!-- Emblemas clicáveis. O data-group é a chave que conecta ao JS. -->
+        <div class="icon-selector" data-group="ALTO_COMANDO"><img src="src/assets/EMBLEMA CORREGEDORIA.png" alt="Alto Comando"><span>Alto Comando</span></div>
+        <div class="icon-selector" data-group="GIC"><img src="src/assets/EMBLEMA INTELIGENCIA.png" alt="G.I.C"><span>G.I.C</span></div>
+        <div class="icon-selector" data-group="GRA"><img src="src/assets/EMBLEMA GRA.png" alt="G.R.A"><span>G.R.A</span></div>
+        <div class="icon-selector" data-group="GTM"><img src="src/assets/EMBLEMA GTM.png" alt="G.TM"><span>G.T.M</span></div>
+        <div class="icon-selector" data-group="GOT"><img src="src/assets/EMBLEMA GOT.png" alt="G.O.T"><span>G.O.T</span></div>
+        <div class="icon-selector" data-group="PERICIA"><img src="src/assets/EMBLEMA PERICIA.png" alt="Perícia"><span>Perícia</span></div>
+        <div class="icon-selector" data-group="INSTRUTORES"><img src="src/assets/EMBLEMA CURSOS.png" alt="Instrutores"><span>Instrutores</span></div>
+      </div>
+
+      <!-- Container onde os seletores de cargo aparecerão dinamicamente -->
+      <div id="cargo-selectors-container"></div>
     </div>
 
-    <!-- Seção de Início de Serviço (COD 0) -->
+    <!-- Seção Início de Patrulhamento (COD 0) - ATUALIZADA E REFINADA -->
     <div class="tool-container">
       <div class="tool-header">
         <h2>Início de Patrulhamento (COD 0)</h2>
       </div>
-      <div class="form-group">
-        <label for="cod0-viatura">Viatura</label>
-        <input type="text" id="cod0-viatura" placeholder="Ex: SPEED-911" />
+
+      <!-- Viatura -->
+      <div class="form-grid">
+        <div class="form-group form-group-full-width">
+          <label for="cod0-viatura">Viatura</label>
+          <input type="text" id="cod0-viatura" placeholder="Ex: SPEED-911">
+        </div>
       </div>
 
-      <h3 class="form-section-title">Tripulação (será ordenada da maior patente para a menor)</h3>
+      <!-- Formulário para Adicionar Tripulação -->
+      <h3 class="form-section-title">Tripulação</h3>
+      <div class="add-crew-form">
+        <div class="form-group">
+          <label for="cod0-patente">Patente</label>
+          <select id="cod0-patente">
+            <option value="Comissário">Comissário</option>
+            <option value="Coronel">Coronel</option>
+            <option value="Tenente Coronel">Tenente Coronel</option>
+            <option value="Major">Major</option>
+            <option value="Capitão">Capitão</option>
+            <option value="1º Tenente">1º Tenente</option>
+            <option value="2º Tenente">2º Tenente</option>
+            <option value="Sub tenente">Sub tenente</option>
+            <option value="1º Sargento">1º Sargento</option>
+            <option value="2º Sargento">2º Sargento</option>
+            <option value="3º Sargento">3º Sargento</option>
+            <option value="Cabo">Cabo</option>
+            <option value="Soldado 1º Classe">Soldado 1º Classe</option>
+            <option value="Soldado 2º Classe">Soldado 2º Classe</option>
+            <option value="Aluno" selected>Aluno</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="cod0-nome-oficial">Nome do Oficial</label>
+          <input type="text" id="cod0-nome-oficial" placeholder="Ex: João Silva">
+        </div>
+        <button id="add-oficial-btn" class="action-button">Adicionar</button>
+      </div>
+
+      <!-- Lista da Tripulação e Resultados -->
       <div id="tripulacao-list">
-        <!-- Oficiais serão adicionados aqui dinamicamente -->
+        <!-- Oficiais adicionados aparecerão aqui dinamicamente -->
       </div>
 
-      <div class="button-group">
-        <button id="add-oficial-btn" class="secondary-button"><i class="fa-solid fa-user-plus"></i> Adicionar Oficial</button>
-      </div>
-
-      <button id="gerar-cod0-btn" class="cta-button"><i class="fa-solid fa-play"></i> Gerar Mensagem de Início</button>
-
-      <div id="cod0-results" class="results-area" style="display: none;">
+      <div class="results-area">
         <pre id="cod0-output"></pre>
-        <button class="copy-button" data-copy-target="cod0-output" title="Copiar Mensagem">
-          <i class="fa-regular fa-copy"></i>
+        <button class="copy-button" data-target="cod0-output" title="Copiar Texto">
+          <i class="fas fa-copy"></i>
         </button>
       </div>
     </div>
@@ -109,6 +171,7 @@
         <p>Clique em uma seção para expandir e ver os modelos.</p>
       </div>
       <div class="accordion">
+
         <!-- Item 1: Rádio -->
         <div class="accordion-item">
           <button class="accordion-header">
@@ -116,26 +179,101 @@
             <i class="fa-solid fa-chevron-down icon"></i>
           </button>
           <div class="accordion-content">
-            <p><strong>Normas:</strong> Evite modular sobre outros, seja direto e claro, sem linguagem inadequada.</p>
-            <div class="template">
-              <pre id="template-radio"></pre>
-              <button class="copy-button" data-copy-target="template-radio" title="Copiar Modelo">
-                <i class="fa-regular fa-copy"></i>
+            <div class="sub-tabs">
+              <button class="sub-tab-button active" data-tab="radio-acompanhamento-tab">
+                <i class="fa-solid fa-car-on"></i> Acompanhamento
               </button>
+              <button class="sub-tab-button" data-tab="radio-outra-tab">
+                <i class="fa-solid fa-plus-circle"></i> Outra Opção
+              </button>
+            </div>
+
+            <div id="radio-acompanhamento-tab" class="sub-tab-content active">
+              <p><strong>Normas:</strong> Evite modular sobre outros, seja direto e claro, sem linguagem inadequada.</p>
+              <div class="form-grid" style="grid-template-columns: repeat(2, 1fr); gap: 1rem 1.5rem; margin-top: 1.5rem;">
+                <div class="form-group">
+                  <label for="radio-veiculo">Veículo</label>
+                  <input type="text" id="radio-veiculo" placeholder="Ex: Sentinel">
+                </div>
+                <div class="form-group">
+                  <label for="radio-cor">Cor</label>
+                  <input type="text" id="radio-cor" placeholder="Ex: Preto">
+                </div>
+                <div class="form-group">
+                  <label for="radio-qru">QRU (Ocorrência)</label>
+                  <input type="text" id="radio-qru" placeholder="Ex: Fuga">
+                </div>
+                <div class="form-group autocomplete-wrapper">
+                  <label for="radio-qth">QTH (Local)</label>
+                  <input type="text" id="radio-qth" placeholder="Digite para buscar..." autocomplete="off">
+                  <div class="autocomplete-suggestions"></div>
+                </div>
+                <div class="form-group">
+                  <label for="radio-qrr-numero">Nº de Unidades (QRR)</label>
+                  <input type="number" id="radio-qrr-numero" placeholder="Ex: 2" min="1">
+                </div>
+                <div class="form-group form-group-full-width">
+                  <label for="radio-qrr-preferencia">Preferência (QRR)</label>
+                  <select id="radio-qrr-preferencia">
+                    <option value="SPEED">SPEED</option>
+                    <option value="GTM">GTM</option>
+                    <option value="qualquer tipo de">Qualquer</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="results-area">
+                <pre id="template-radio"></pre>
+                <button class="copy-button" data-copy-target="template-radio" title="Copiar Mensagem">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>
+            </div>
+
+            <div id="radio-outra-tab" class="sub-tab-content">
+              <p>Esta seção está reservada para futuras funcionalidades de rádio.</p>
             </div>
           </div>
         </div>
-        <!-- Item 2: CP (Chat Policial) (ESTRUTURA ATUALIZADA) -->
+
+        <!-- ================================================== -->
+        <!-- Item 2: CP (Chat Policial) (MODIFICADO COM ABAS)   -->
+        <!-- ================================================== -->
         <div class="accordion-item">
           <button class="accordion-header">
             <span><i class="fa-solid fa-comments"></i> CP (Chat Policial)</span>
             <i class="fa-solid fa-chevron-down icon"></i>
           </button>
           <div class="accordion-content">
-            <p><strong>Uso:</strong> Solicitar vaga em patrulha ou informações sobre ocorrências.</p>
+            <p><strong>Uso:</strong> Comunicações rápidas via chat da polícia para status e solicitações.</p>
 
-            <div class="comms-example" style="padding-left: 0; margin-bottom: 1.5rem;">
-              <h4>Exemplo 1: Solicitar Vaga</h4>
+            <div class="sub-tabs">
+              <button class="sub-tab-button active" data-tab="cp-iniciar-tab">
+                <i class="fa-solid fa-play-circle"></i> Iniciar Expediente
+              </button>
+              <button class="sub-tab-button" data-tab="cp-vaga-tab">
+                <i class="fa-solid fa-user-plus"></i> Solicitar Vaga
+              </button>
+              <button class="sub-tab-button" data-tab="cp-bo-tab">
+                <i class="fa-solid fa-file-pen"></i> Solicitar B.O.
+              </button>
+              <button class="sub-tab-button" data-tab="cp-finalizar-tab">
+                <i class="fa-solid fa-stop-circle"></i> Finalizar Expediente
+              </button>
+            </div>
+
+            <!-- Aba Iniciar Expediente -->
+            <div id="cp-iniciar-tab" class="sub-tab-content active">
+              <div class="template">
+                <pre id="template-cp-iniciar"></pre>
+                <button class="copy-button" data-copy-target="template-cp-iniciar" title="Copiar Modelo">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Aba Solicitar Vaga -->
+            <div id="cp-vaga-tab" class="sub-tab-content">
               <div class="template">
                 <pre id="template-cp-vaga"></pre>
                 <button class="copy-button" data-copy-target="template-cp-vaga" title="Copiar Modelo">
@@ -144,8 +282,8 @@
               </div>
             </div>
 
-            <div class="comms-example" style="padding-left: 0;">
-              <h4>Exemplo 2: Solicitar B.O.</h4>
+            <!-- Aba Solicitar B.O. -->
+            <div id="cp-bo-tab" class="sub-tab-content">
               <div class="form-group">
                 <label for="cp-bo-veiculo">Veículo</label>
                 <input type="text" id="cp-bo-veiculo" placeholder="Digite o modelo do veículo...">
@@ -157,10 +295,23 @@
                 </button>
               </div>
             </div>
+
+            <!-- Aba Finalizar Expediente -->
+            <div id="cp-finalizar-tab" class="sub-tab-content">
+              <div class="template">
+                <pre id="template-cp-finalizar"></pre>
+                <button class="copy-button" data-copy-target="template-cp-finalizar" title="Copiar Modelo">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
+        <!-- ================================================== -->
+        <!-- FIM DA MODIFICAÇÃO                                 -->
+        <!-- ================================================== -->
 
-        <!-- Item 3: Chamados (ESTRUTURA ATUALIZADA PARA AUTOCOMPLETE) -->
+        <!-- Item 3: Chamados -->
         <div class="accordion-item">
           <button class="accordion-header">
             <span><i class="fa-solid fa-bullhorn"></i> Chamados</span>
@@ -209,7 +360,7 @@
             </div>
           </div>
         </div>
-        <!-- Item 4: Demais Meios de Comunicação (DESCRIÇÕES ATUALIZADAS) -->
+        <!-- Item 4: Demais Meios de Comunicação -->
         <div class="accordion-item">
           <button class="accordion-header">
             <span><i class="fa-solid fa-satellite-dish"></i> Demais Meios de Comunicação</span>

@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
+/* --- Variáveis de Cor --- */
 :root {
     --bg: #F8F9FA;
     --bg-soft: #FFFFFF;
@@ -17,7 +18,7 @@
     --cta-text: #1A160A;
 }
 
-.dark-mode {
+html.dark-mode {
     --bg: #121212;
     --bg-soft: #1A1A1A;
     --text: #EAEAEA;
@@ -40,29 +41,37 @@
     object-fit: contain;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* --- Estilos Globais e de Base --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
 
-/* --- Body (AJUSTADO) --- */
+html { scroll-behavior: smooth; }
+
+body {
+    display: flex; background-color: var(--bg); color: var(--text);
+    font-family: "Inter", sans-serif; line-height: 1.6;
+}
+
 body {
     display: flex;
     background-color: var(--bg);
     color: var(--text);
     font-family: "Inter", sans-serif;
-    transition: background-color 0.3s, color 0.3s;
-    min-height: 100vh; /* Garante que o body ocupe pelo menos a altura da tela */
+    line-height: 1.6;
 }
 
-/* --- Sidebar (AJUSTADO) --- */
+html.dark-mode body { background-image: radial-gradient(circle at top, #1f2937, #121212 35%); }
+html.dark-mode body::before { opacity: 0.04; }
+
+/* --- Sidebar --- */
 #sidebar {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: var(--box-bg);
-    /* height: 100vh; FOI REMOVIDO para permitir que a sidebar cresça */
-    position: relative;
-    transition: min-width 0.4s ease;
-    min-width: 82px;
-    z-index: 10;
+    display: flex; flex-direction: column; justify-content: space-between;
+    background-color: var(--box-bg); height: 100vh; position: sticky; top: 0;
+    transition: min-width 0.4s ease; min-width: 82px; z-index: 10;
     border-right: 1px solid var(--box-border);
 }
 #sidebar_content { padding: 12px; }
@@ -70,9 +79,13 @@ body {
 #user_avatar { width: 50px; height: 50px; object-fit: cover; border-radius: 50%; }
 #user_infos { display: flex; flex-direction: column; overflow: hidden; white-space: nowrap; color: var(--text); }
 #side_items { display: flex; flex-direction: column; gap: 8px; list-style: none; }
-.side-item { border-radius: 8px; cursor: pointer; transition: background-color 0.2s; }
+.side-item { border-radius: 8px; cursor: pointer; }
 .side-item a { text-decoration: none; display: flex; align-items: center; justify-content: flex-start; color: var(--text-soft); padding: 14px; gap: 16px; }
-.side-item.active a { color: var(--highlight); background-color: var(--highlight-soft); font-weight: 600; }
+.side-item.active a {
+    color: var(--highlight); background-color: var(--highlight-soft); font-weight: 600;
+    border-left: 4px solid var(--highlight); padding-left: 10px;
+    box-shadow: inset 0 0 15px -5px color-mix(in srgb, var(--highlight) 30%, transparent);
+}
 .side-item:not(.active):hover { background-color: var(--hover); }
 .side-item a i { font-size: 20px; width: 20px; text-align: center; color: var(--text-soft); }
 .side-item.active a i { color: var(--highlight); }
@@ -83,53 +96,63 @@ body {
 #sidebar.open-sidebar { min-width: 260px; }
 #sidebar.open-sidebar .item-description { width: 150px; }
 
-/* --- Conteúdo Principal (Reutilizado) --- */
-main { flex: 1; padding: 2rem; overflow-y: auto; }
+/* --- Conteúdo Principal e Contêineres --- */
+main { flex: 1; padding: 2rem; min-height: 100vh; overflow-y: auto; }
 .content-wrapper { width: 100%; max-width: 950px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; }
-.tool-container { background-color: var(--box-bg); padding: 2rem; border-radius: 16px; border: 1px solid var(--box-border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); }
+.tool-container {
+    background-color: var(--box-bg); padding: 2rem; border-radius: 16px;
+    border: 1px solid var(--box-border);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.tool-container:hover { transform: translateY(-2px); box-shadow: 0 8px 20px -5px rgba(0,0,0,0.08); }
+html.dark-mode .tool-container:hover { box-shadow: 0 8px 25px -5px rgba(0,0,0,0.2); }
 .tool-header { text-align: center; margin-bottom: 2rem; }
-.tool-header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+.tool-header .header-emblem { width: 175px; height: 175px; object-fit: contain; margin: 0 auto 1rem; }
+.tool-header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
 .tool-header h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.25rem; }
-.tool-header h3.form-section-title { font-size: 1.1rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--box-border); text-align: left; }
+h3.form-section-title { font-size: 1.1rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--box-border); text-align: left; }
 .tool-header p { font-size: 1rem; color: var(--text-soft); }
 
-/* --- Formulário (Reutilizado) --- */
-.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-.form-group { margin-bottom: 1.5rem; }
-.form-group:last-of-type { margin-bottom: 0; }
+/* --- Formulários (REGRA ÚNICA E CORRIGIDA) --- */
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); column-gap: 1.5rem; row-gap: 1.75rem; }
 .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem; }
-.form-group input, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--box-border); background-color: var(--bg); border-radius: 8px; font-size: 1rem; color: var(--text); transition: border-color 0.2s, box-shadow 0.2s; }
-.form-group input:focus, .form-group select:focus { outline: none; border-color: var(--highlight); box-shadow: 0 0 0 3px var(--highlight-soft); }
-.button-group { display: flex; justify-content: flex-start; gap: 1rem; margin-top: 1rem; }
-.cta-button { width: 100%; margin-top: 1.5rem; padding: 1rem 1.5rem; background-color: var(--cta-bg); color: var(--cta-text); border: none; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background-color 0.3s, transform 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-.cta-button:hover { filter: brightness(1.1); transform: translateY(-2px); }
-.secondary-button { padding: 0.75rem 1rem; background-color: var(--secondary-bg); color: var(--secondary-text); border: none; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: background-color 0.3s, transform 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-.secondary-button:hover { background-color: var(--secondary-hover-bg); transform: translateY(-2px); }
 
-/* --- Estilo para a linha de cada oficial (COD 0) (ATUALIZADO) --- */
-.oficial-item { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-.oficial-item .oficial-patente { flex-shrink: 0; width: auto; }
-.oficial-item .oficial-nome { flex-grow: 1; }
-.oficial-item input, .oficial-item select {
+/* REGRA GLOBAL PARA TODOS OS INPUTS E SELECTS */
+.form-group input, .form-group select {
+    width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--box-border);
+    background-color: transparent;
+    border-radius: 8px; font-size: 1rem; color: var(--text);
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
+}
+
+/* Adiciona a seta APENAS para elementos SELECT */
+.form-group select {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid var(--box-border);
-    background-color: var(--bg);
+    background-color: transparent;
     border-radius: 8px;
     font-size: 1rem;
     color: var(--text);
-}
-.oficial-item .remove-oficial-btn {
-    padding: 0.75rem;
-    line-height: 1;
-    background-color: #ef4444;
-    color: white;
-}
-.oficial-item .remove-oficial-btn:hover {
-    background-color: #dc2626;
+    position: relative;
 }
 
-/* --- Acordeão para Guia de Comunicação --- */
+/* Efeito de FOCO global */
+.form-group select:focus {
+    outline: none;
+    border-color: var(--highlight);
+}
+.form-group-full-width { grid-column: 1 / -1; }
+
+/* --- Botões --- */
+.button-group { display: flex; justify-content: flex-start; gap: 1rem; margin-top: 1rem; }
+.cta-button { width: 100%; margin-top: 1.5rem; padding: 1rem 1.5rem; color: var(--cta-text); border: 1px solid color-mix(in srgb, var(--cta-bg) 100%, black 15%); border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background-image: linear-gradient(145deg, color-mix(in srgb, var(--cta-bg) 100%, white 10%), color-mix(in srgb, var(--cta-bg) 100%, black 5%)); }
+.cta-button:hover { transform: translateY(-3px); box-shadow: 0 4px 15px -3px color-mix(in srgb, var(--cta-bg) 50%, transparent); }
+.secondary-button { padding: 0.75rem 1rem; background-color: var(--secondary-bg); color: var(--secondary-text); border: none; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+.secondary-button:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+/* --- Componentes Específicos --- */
 .accordion-item { border-bottom: 1px solid var(--box-border); }
 .accordion-item:last-child { border-bottom: none; }
 .accordion-header { background-color: transparent; width: 100%; padding: 1.25rem 0.5rem; border: none; display: flex; justify-content: space-between; align-items: center; cursor: pointer; text-align: left; }
@@ -137,175 +160,89 @@ main { flex: 1; padding: 2rem; overflow-y: auto; }
 .accordion-header .icon { font-size: 0.9rem; color: var(--text-soft); transition: transform 0.3s ease; }
 .accordion-item.active .accordion-header .icon { transform: rotate(180deg); }
 .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 0.5rem; }
-.accordion-content p { margin-bottom: 1rem; line-height: 1.6; color: var(--text-soft); }
 .accordion-item.active .accordion-content { padding: 1.5rem 0.5rem; }
 
-/* --- Abas (Tabs) dentro do Acordeão --- */
 .sub-tabs { display: flex; border-bottom: 2px solid var(--box-border); margin-bottom: 1.5rem; }
 .sub-tab-button { all: unset; padding: 0.75rem 1.25rem; font-weight: 600; font-size: 1rem; cursor: pointer; color: var(--text-soft); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color 0.2s, border-color 0.2s; display: flex; align-items: center; gap: 0.5rem; }
 .sub-tab-button:hover { color: var(--text); }
 .sub-tab-button.active { color: var(--highlight); border-bottom-color: var(--highlight); }
 .sub-tab-content { display: none; animation: fadeIn 0.5s; padding-top: 1rem; }
 .sub-tab-content.active { display: block; }
-
-/* --- Estilos para a seção "Demais Meios" --- */
-.comms-channel { padding: 1.5rem; border: 1px solid var(--box-border); border-radius: 12px; margin-bottom: 1.5rem; }
-.comms-channel:last-child { margin-bottom: 0; }
-.comms-channel-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; }
-.comms-channel-description { color: var(--text-soft); margin-bottom: 1.5rem; padding-left: 2.2rem; line-height: 1.6; }
-.comms-example { margin-bottom: 1.5rem; }
-.comms-example:last-child { margin-bottom: 0; }
-.comms-example h4 { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.75rem; }
-.comms-example .template { margin-top: 0; }
-
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-/* --- Template de Comunicação --- */
-.template { position: relative; background-color: var(--bg-soft); border: 1px solid var(--box-border); border-radius: 8px; margin-top: 1rem; }
-.template pre { padding: 1rem; white-space: pre-wrap; word-wrap: break-word; font-family: "Courier New", Courier, monospace; font-size: 0.9rem; line-height: 1.7; color: var(--text); padding-right: 4rem; }
-.copy-button { position: absolute; top: 0.5rem; right: 0.5rem; background: var(--hover); border: 1px solid var(--box-border); color: var(--text-soft); border-radius: 8px; width: 40px; height: 40px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; }
+/* --- Área de Resultados e Template --- */
+.results-area, .template {
+    position: relative; margin-top: 2rem; background-color: var(--bg-soft);
+    border: 1px solid var(--box-border); border-radius: 12px; overflow: hidden;
+    border-top: 4px solid var(--highlight);
+}
+.results-area pre, .template pre {
+    padding: 1.5rem; white-space: pre-wrap; word-wrap: break-word;
+    font-family: "Courier New", Courier, monospace; font-size: 0.9rem;
+    line-height: 1.7; color: var(--text); padding-right: 4rem;
+}
+.copy-button {
+    position: absolute; top: 0.5rem; right: 0.5rem; background: var(--hover);
+    border: 1px solid var(--box-border); color: var(--text-soft); border-radius: 8px;
+    width: 40px; height: 40px; cursor: pointer; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+}
 .copy-button:hover { background: var(--highlight-soft); color: var(--highlight); }
 
-/* --- Área de Resultados (Reutilizado) --- */
-.results-area { position: relative; margin-top: 1rem; background-color: var(--bg-soft); border: 1px solid var(--box-border); border-radius: 12px; overflow: hidden; }
-.results-area pre { padding: 1.5rem; white-space: pre-wrap; word-wrap: break-word; font-family: "Courier New", Courier, monospace; font-size: 0.9rem; line-height: 1.7; color: var(--text); padding-right: 4rem; }
-
-/* --- Botão Dark Mode (Reutilizado) --- */
-#toggle-dark { all: unset; position: fixed; bottom: 20px; left: 20px; z-index: 999; font-size: 24px; cursor: pointer; line-height: 1; }
-
-/* --- ESTILOS PARA AUTOCOMPLETE (NOVO) --- */
+/* --- Autocomplete --- */
 .autocomplete-wrapper { position: relative; }
 .autocomplete-suggestions {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: var(--box-bg);
-    border: 1px solid var(--box-border);
-    border-top: none;
-    border-radius: 0 0 12px 12px;
-    z-index: 100;
-    max-height: 200px;
-    overflow-y: auto;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    position: absolute; top: 100%; left: 0; right: 0; background-color: var(--box-bg);
+    border: 1px solid var(--box-border); border-top: none; border-radius: 0 0 12px 12px;
+    z-index: 100; max-height: 200px; overflow-y: auto; box-shadow: 0 8px 16px rgba(0,0,0,0.1);
 }
-.autocomplete-suggestions div {
-    padding: 0.75rem 1rem;
-    cursor: pointer;
-    font-size: 0.95rem;
-    color: var(--text-soft);
-    border-bottom: 1px solid var(--box-border);
-    transition: background-color 0.2s;
-}
+.autocomplete-suggestions div { padding: 0.75rem 1rem; cursor: pointer; font-size: 0.95rem; color: var(--text-soft); border-bottom: 1px solid var(--box-border); }
 .autocomplete-suggestions div:last-child { border-bottom: none; }
-.autocomplete-suggestions div:hover,
-.autocomplete-suggestions div.active {
-    background-color: var(--highlight-soft);
+.autocomplete-suggestions div:hover, .autocomplete-suggestions div.active { background-color: var(--highlight-soft); color: var(--highlight); }
+
+/* --- Estilos da Seção COD 0 --- */
+.add-crew-form {
+    display: grid;
+    grid-template-columns: minmax(220px, auto) 1fr auto;
+    gap: 1rem;
+    align-items: flex-end;
+}
+.add-crew-form .form-group { margin-bottom: 0; }
+.add-crew-form .action-button {
+    padding: 0.75rem 1.25rem; background-color: var(--secondary-bg);
+    color: var(--secondary-text); border: 1px solid var(--box-border);
+    border-radius: 8px; font-weight: 600; font-size: 0.9rem;
+    cursor: pointer; white-space: nowrap;
+}
+.add-crew-form .action-button:hover {
+    background-color: var(--secondary-hover-bg);
+    border-color: var(--highlight);
     color: var(--highlight);
 }
-.autocomplete-suggestions strong {
-    color: var(--text);
-    font-weight: 600;
+#tripulacao-list { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.tripulacao-item {
+    display: flex; justify-content: space-between; align-items: center;
+    background-color: var(--bg-soft); padding: 0.75rem 1rem;
+    border-radius: 8px; border: 1px solid var(--box-border);
 }
-.autocomplete-suggestions div.active strong { color: var(--highlight); }
+.tripulacao-item span { font-weight: 500; }
+.remove-oficial-btn {
+    all: unset; box-sizing: border-box; display: flex;
+    align-items: center; justify-content: center; width: 28px;
+    height: 28px; border-radius: 50%; background-color: var(--hover);
+    color: var(--text-soft); cursor: pointer; font-size: 1.2rem; line-height: 1;
+}
+.remove-oficial-btn:hover { background-color: #ef4444; color: white; }
 
-/* --- RODAPÉ DE CRÉDITOS (REFINADO) --- */
-.credits-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 3rem;
-    padding: 1rem;
-    text-align: center;
-}
-.credits-footer img {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 1px solid var(--box-border);
-    transition: transform 0.3s ease;
-}
-.credits-footer a:hover img { transform: scale(1.15); }
-.credits-footer p {
-    font-size: 0.875rem;
-    color: var(--text-soft);
-}
-.credits-footer p a {
-    color: var(--text);
-    font-weight: 500;
-    text-decoration: none;
-    transition: color 0.2s;
-}
-.credits-footer p a:hover {
-    color: var(--highlight);
-    text-decoration: underline;
-}
+/* --- Rodapé e Controles Finais --- */
+.credits-footer { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 3rem; padding: 1rem; text-align: center; }
+.credits-footer img { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--box-border); }
+#toggle-dark { all: unset; position: fixed; bottom: 20px; left: 20px; z-index: 999; font-size: 24px; cursor: pointer; line-height: 1; }
+main::-webkit-scrollbar { width: 10px; }
+main::-webkit-scrollbar-track { background: var(--bg-soft); border-radius: 10px; }
+main::-webkit-scrollbar-thumb { background-color: var(--secondary-hover-bg); border-radius: 10px; border: 2px solid var(--bg-soft); }
 
-.tool-header h1 {
-    letter-spacing: -0.5px;
-}
-
-.accordion-content p, .comms-channel-description {
-    line-height: 1.7;
-}
-
-.cta-button {
-    background-image: linear-gradient(145deg,
-    color-mix(in srgb, var(--cta-bg) 100%, white 10%),
-    color-mix(in srgb, var(--cta-bg) 100%, black 5%)
-    );
-    border: 1px solid color-mix(in srgb, var(--cta-bg) 100%, black 15%);
-}
-
-.side-item.active a {
-    box-shadow: inset 0 0 15px -5px color-mix(in srgb, var(--highlight) 30%, transparent);
-}
-
-.dark-mode body {
-    background-image: radial-gradient(circle at top, #1f2937, #121212 35%);
-}
-
-body {
-    line-height: 1.6;
-}
-
-.tool-header h1 {
-    letter-spacing: -0.5px;
-}
-
-.accordion-content p, .comms-channel-description {
-    line-height: 1.7;
-}
-
-.dark-mode body::before {
-    opacity: 0.04;
-}
-
-.form-group input, .form-group select {
-    position: relative;
-    background-color: transparent; /* Permite ver a animação por baixo */
-}
-
-/* Remove a sombra padrão para dar lugar à nova animação */
-.form-group input:focus, .form-group select:focus {
-    box-shadow: none;
-}
-
-/* Cria a linha animada */
-.form-group input::after, .form-group select::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 2px;
-    background-color: var(--highlight);
-    transition: width 0.4s ease;
-}
-
-/* Aciona a animação da linha ao focar */
-.form-group input:focus::after, .form-group select:focus::after {
-    width: 100%;
+/* --- Responsividade --- */
+@media (max-width: 768px) {
+    .add-crew-form { grid-template-columns: 1fr; }
 }
