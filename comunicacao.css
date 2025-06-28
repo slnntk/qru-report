@@ -5,16 +5,16 @@
     --bg-soft: #FFFFFF;
     --text: #212529;
     --text-soft: #6C757D;
-    --highlight: #B89B2E;
-    --highlight-soft: #FFFBEB;
     --box-bg: #FFFFFF;
     --box-border: #E0E0E0;
     --hover: #F1F1F1;
-    --cta-bg: #D4AF37;
-    --cta-text: #121212;
     --secondary-bg: #EAEAEA;
     --secondary-text: #333333;
     --secondary-hover-bg: #DCDCDC;
+    --highlight: #D9C38A;
+    --cta-bg: #D9C38A;
+    --highlight-soft: #F9F6ED;
+    --cta-text: #1A160A;
 }
 
 .dark-mode {
@@ -22,16 +22,16 @@
     --bg-soft: #1A1A1A;
     --text: #EAEAEA;
     --text-soft: #A0A0A0;
-    --highlight: #FFD700;
-    --highlight-soft: #42350C;
     --box-bg: #1E1E1E;
     --box-border: #333333;
     --hover: #2A2A2A;
-    --cta-bg: #FFD700;
-    --cta-text: #121212;
     --secondary-bg: #333333;
     --secondary-text: #EAEAEA;
     --secondary-hover-bg: #404040;
+    --highlight: #D9C38A;
+    --cta-bg: #D9C38A;
+    --highlight-soft: #3A3423;
+    --cta-text: #1A160A;
 }
 
 .header-emblem {

@@ -4,10 +4,8 @@
  * geradores de códigos e chamados, e interações de UI como acordeões e autocompletar.
  */
 
-// A SOLUÇÃO ESTÁ AQUI: Importamos os dados diretamente, assim como fizemos no relatorio.js
 import pontosDeReferenciaData from './pontos_referencia.json';
 
-// Garante que o script só seja executado após o DOM ser completamente carregado.
 document.addEventListener("DOMContentLoaded", () => {
 
     /**
@@ -17,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function initializeApp(pontosDeReferencia) {
 
         // --- Gerenciamento de Estado da UI ---
-
         const sidebar = document.getElementById("sidebar");
         document.getElementById("open_btn").addEventListener("click", () => sidebar.classList.toggle("open-sidebar"));
 
@@ -30,27 +27,43 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem("theme", document.documentElement.classList.contains("dark-mode") ? "dark" : "light");
         });
 
-        // --- Personalização Dinâmica ---
+        // --- Personalização Dinâmica e Persistência ---
         const userNomeInput = document.getElementById("user-nome");
         const userBadgeInput = document.getElementById("user-badge");
         const userPassaporteInput = document.getElementById("user-passaporte");
 
+        // Função para carregar os dados do oficial salvos no localStorage.
+        function loadOfficialData() {
+            userNomeInput.value = localStorage.getItem('user-nome') || '';
+            userBadgeInput.value = localStorage.getItem('user-badge') || '';
+            userPassaporteInput.value = localStorage.getItem('user-passaporte') || '';
+        }
+
+        // Função central que atualiza todos os templates dinâmicos.
         function updateAllDynamicTemplates() {
             updateTemplates();
             updateMecanicaCall();
             updateHospitalCall();
         }
 
+        // Atualiza os templates de texto que dependem do nome e badge do usuário.
         function updateTemplates() {
             const nomeCompleto = userNomeInput.value || "[PATENTE NOME]";
             const badge = userBadgeInput.value || "[BADGE]";
             const nome = nomeCompleto.split(' ').slice(1).join(' ') || nomeCompleto;
+
             document.getElementById("template-radio").innerText = `QAP Central, ${nome} (${badge}) iniciando acompanhamento a um [VEÍCULO] [COR], da QRU de [QRU], no QTH do [QTH], necessito do QRR de mais [NÚMERO] unidades, preferência [TIPO DE UNIDADE].`;
             document.getElementById("template-cp-vaga").innerText = `QAP Central, ${nomeCompleto} ${badge} no QAP. Alguma unidade com vaga ou algum oficial sem PTR para composição e início de Código 0?`;
         }
 
+        // Adiciona listeners para salvar os dados no localStorage sempre que forem alterados.
         [userNomeInput, userBadgeInput, userPassaporteInput].forEach(input => {
-            input.addEventListener("input", updateAllDynamicTemplates);
+            input.addEventListener("input", (event) => {
+                // Salva o valor do campo usando seu 'id' como chave.
+                localStorage.setItem(event.target.id, event.target.value);
+                // Atualiza os templates em tempo real.
+                updateAllDynamicTemplates();
+            });
         });
 
         // --- Lógica do Acordeão ---
@@ -59,12 +72,14 @@ document.addEventListener("DOMContentLoaded", () => {
             header.addEventListener("click", () => {
                 const content = item.querySelector(".accordion-content");
                 const isActive = item.classList.contains("active");
+
                 document.querySelectorAll(".accordion-item").forEach(other => {
                     if (other !== item) {
                         other.classList.remove("active");
                         other.querySelector(".accordion-content").style.maxHeight = 0;
                     }
                 });
+
                 if (!isActive) {
                     item.classList.add("active");
                     content.style.maxHeight = content.scrollHeight + 400 + "px";
@@ -83,6 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const cod0Output = document.getElementById("cod0-output");
         const viaturaInput = document.getElementById("cod0-viatura");
         const patentes = [ { nome: "Aluno", abrev: "AL", valor: 0 }, { nome: "Soldado 2ª Classe", abrev: "SD2", valor: 1 }, { nome: "Soldado 1ª Classe", abrev: "SD1", valor: 2 }, { nome: "Cabo", abrev: "CB", valor: 3 }, { nome: "Sargento", abrev: "SGT", valor: 4 }, { nome: "Tenente", abrev: "TEN", valor: 5 }, { nome: "Capitão", abrev: "CAP", valor: 6 }, { nome: "Major", abrev: "MAJ", valor: 7 }, { nome: "Coronel", abrev: "CEL", valor: 8 } ];
+
         const addOficial = (nome = "", patenteSelecionada = "Aluno") => {
             const oficialItem = document.createElement("div");
             oficialItem.className = "oficial-item";
@@ -90,7 +106,9 @@ document.addEventListener("DOMContentLoaded", () => {
             tripulacaoList.appendChild(oficialItem);
             oficialItem.querySelector(".remove-oficial-btn").addEventListener("click", () => oficialItem.remove());
         };
+
         addOficialBtn.addEventListener("click", () => addOficial());
+
         gerarCod0Btn.addEventListener("click", () => {
             const viatura = viaturaInput.value || "[VIATURA]";
             const oficiais = Array.from(document.querySelectorAll(".oficial-item")).map(item => {
@@ -98,14 +116,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 const patenteInfo = patentes.find(p => p.nome === patenteNome);
                 return { nome: item.querySelector(".oficial-nome").value.trim() || "[NOME]", patente: patenteInfo.abrev, valor: patenteInfo.valor };
             }).filter(o => o.nome !== "[NOME]");
+
             oficiais.sort((a, b) => b.valor - a.valor);
+
             if (oficiais.length === 0) {
                 cod0Output.innerText = "Adicione pelo menos um oficial à tripulação.";
                 cod0Results.style.display = "block";
                 return;
             }
+
             const nomesFormatados = oficiais.map(o => `${o.patente} ${o.nome}`);
             let tripulacaoTexto = nomesFormatados.length === 1 ? nomesFormatados[0] : `${nomesFormatados.slice(0, -1).join(", ")} e ${nomesFormatados.slice(-1)[0]}`;
+
             cod0Output.innerText = `QAP Central, viatura ${viatura} iniciando patrulhamento em COD 0. Tripulada pelo ${tripulacaoTexto}.`;
             cod0Results.style.display = "block";
         });
@@ -126,6 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const ultimaPalavra = qth.trim().split(" ").pop().toLowerCase();
             return ultimaPalavra.endsWith('a') ? "da" : "do";
         };
+
         const mecanicaQthInput = document.getElementById("mecanica-qth");
         const mecanicaOutput = document.getElementById("mecanica-output");
         const hospitalQthInput = document.getElementById("hospital-qth");
@@ -147,6 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const passaporte = userPassaporteInput.value || "[PASSAPORTE]";
             hospitalOutput.innerText = `Solicito apoio médico no QTH ${getArtigo(qth)} ${qth} para reanimação de indivíduos envolvidos em ${ocorrencia}. Att. #${badge} ${nomeCompleto} | ${passaporte}`;
         }
+
         mecanicaQthInput.addEventListener("input", updateMecanicaCall);
         hospitalQthInput.addEventListener("input", updateHospitalCall);
         hospitalOcorrenciaInput.addEventListener("input", updateHospitalCall);
@@ -156,6 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const output911_1 = document.getElementById("911-1-output");
         const localInput = document.getElementById("911-local");
         const output911_2 = document.getElementById("911-2-output");
+
         function update911_1() {
             const nomeCivil = nomeCivilInput.value.trim() || "[NOME DO CIVIL]";
             output911_1.innerText = `Sr. ${nomeCivil}, encontra-se na cidade? Favor responder através do 911 (1/3).`;
@@ -170,6 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- Lógica do Gerador de CP B.O. ---
         const cpBoVeiculoInput = document.getElementById("cp-bo-veiculo");
         const cpBoOutput = document.getElementById("template-cp-bo");
+
         function updateCpBo() {
             const veiculo = cpBoVeiculoInput.value.trim() || "[VEÍCULO]";
             cpBoOutput.innerText = `QAP Central, qual o número do B.O da QRU do ${veiculo}?`;
@@ -180,6 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
         function setupAutocomplete(inputElement, onSelectCallback) {
             const suggestionsContainer = inputElement.nextElementSibling;
             let activeSuggestionIndex = -1;
+
             inputElement.addEventListener("input", function() {
                 const value = this.value;
                 suggestionsContainer.innerHTML = "";
@@ -207,6 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 activeSuggestionIndex = -1;
             });
+
             inputElement.addEventListener("keydown", function(e) {
                 const suggestions = suggestionsContainer.querySelectorAll("div");
                 if (suggestions.length === 0) return;
@@ -228,11 +256,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     suggestionsContainer.style.display = "none";
                 }
             });
+
             function updateActiveSuggestion(suggestions) {
                 suggestions.forEach((div, index) => {
                     div.classList.toggle("active", index === activeSuggestionIndex);
                 });
             }
+
             document.addEventListener("click", (e) => {
                 if (e.target.closest('.autocomplete-wrapper') === null) {
                     suggestionsContainer.innerHTML = "";
@@ -241,6 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
+        // Aplica o autocompletar a todos os campos de localização relevantes.
         setupAutocomplete(mecanicaQthInput, updateMecanicaCall);
         setupAutocomplete(hospitalQthInput, updateHospitalCall);
         setupAutocomplete(localInput, update911_2);
@@ -260,9 +291,15 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-        // --- Inicialização ---
-        updateAllDynamicTemplates();
-        addOficial(userNomeInput.value.split(' ').slice(1).join(' '), "Aluno");
+        // --- Inicialização da Página ---
+        loadOfficialData(); // Carrega os dados salvos do oficial
+        updateAllDynamicTemplates(); // Atualiza todos os templates com os dados carregados/existentes
+
+        // Adiciona um oficial à lista de tripulação com base nos dados carregados, se disponíveis
+        const nomeOficial = userNomeInput.value.split(' ').slice(1).join(' ') || "";
+        addOficial(nomeOficial, "Aluno"); // Define uma patente padrão
+
+        // Atualiza os geradores de texto
         update911_1();
         update911_2();
         updateCpBo();
@@ -271,6 +308,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --- PONTO DE ENTRADA DA APLICAÇÃO ---
-    // Removemos o 'fetch' e inicializamos o app diretamente com os dados importados.
+    // Inicializa o app com os dados do JSON, que já foram importados.
     initializeApp(pontosDeReferenciaData.sort());
 });
