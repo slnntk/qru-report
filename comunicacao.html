@@ -107,60 +107,66 @@
       <div id="cargo-selectors-container"></div>
     </div>
 
-    <!-- Seção Início de Patrulhamento (COD 0) - ATUALIZADA E REFINADA -->
+    <!-- Seção Início de Patrulhamento (COD 0) - AGORA RETRÁTIL -->
     <div class="tool-container">
-      <div class="tool-header">
-        <h2>Início de Patrulhamento (COD 0)</h2>
-      </div>
+      <div class="accordion">
+        <div class="accordion-item no-border">
+          <button class="accordion-header standalone">
+            <span><i class="fa-solid fa-car-side"></i> Início de Patrulhamento (COD 0)</span>
+            <i class="fa-solid fa-chevron-down icon"></i>
+          </button>
+          <div class="accordion-content">
+            <!-- Viatura -->
+            <div class="form-grid">
+              <div class="form-group form-group-full-width">
+                <label for="cod0-viatura">Viatura</label>
+                <input type="text" id="cod0-viatura" placeholder="Ex: SPEED-911">
+              </div>
+            </div>
 
-      <!-- Viatura -->
-      <div class="form-grid">
-        <div class="form-group form-group-full-width">
-          <label for="cod0-viatura">Viatura</label>
-          <input type="text" id="cod0-viatura" placeholder="Ex: SPEED-911">
+            <!-- Formulário para Adicionar Tripulação -->
+            <h3 class="form-section-title">Tripulação</h3>
+            <div class="add-crew-form">
+              <div class="form-group">
+                <label for="cod0-patente">Patente</label>
+                <select id="cod0-patente">
+                  <option value="Comissário">Comissário</option>
+                  <option value="Coronel">Coronel</option>
+                  <option value="Tenente Coronel">Tenente Coronel</option>
+                  <option value="Major">Major</option>
+                  <option value="Capitão">Capitão</option>
+                  <option value="1º Tenente">1º Tenente</option>
+                  <option value="2º Tenente">2º Tenente</option>
+                  <option value="Sub tenente">Sub tenente</option>
+                  <option value="1º Sargento">1º Sargento</option>
+                  <option value="2º Sargento">2º Sargento</option>
+                  <option value="3º Sargento">3º Sargento</option>
+                  <option value="Cabo">Cabo</option>
+                  <option value="Soldado 1º Classe">Soldado 1º Classe</option>
+                  <option value="Soldado 2º Classe">Soldado 2º Classe</option>
+                  <option value="Aluno" selected>Aluno</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="cod0-nome-oficial">Nome do Oficial</label>
+                <input type="text" id="cod0-nome-oficial" placeholder="Ex: João Silva">
+              </div>
+              <button id="add-oficial-btn" class="action-button">Adicionar</button>
+            </div>
+
+            <!-- Lista da Tripulação e Resultados -->
+            <div id="tripulacao-list">
+              <!-- Oficiais adicionados aparecerão aqui dinamicamente -->
+            </div>
+
+            <div class="results-area">
+              <pre id="cod0-output"></pre>
+              <button class="copy-button" data-target="cod0-output" title="Copiar Texto">
+                <i class="fas fa-copy"></i>
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <!-- Formulário para Adicionar Tripulação -->
-      <h3 class="form-section-title">Tripulação</h3>
-      <div class="add-crew-form">
-        <div class="form-group">
-          <label for="cod0-patente">Patente</label>
-          <select id="cod0-patente">
-            <option value="Comissário">Comissário</option>
-            <option value="Coronel">Coronel</option>
-            <option value="Tenente Coronel">Tenente Coronel</option>
-            <option value="Major">Major</option>
-            <option value="Capitão">Capitão</option>
-            <option value="1º Tenente">1º Tenente</option>
-            <option value="2º Tenente">2º Tenente</option>
-            <option value="Sub tenente">Sub tenente</option>
-            <option value="1º Sargento">1º Sargento</option>
-            <option value="2º Sargento">2º Sargento</option>
-            <option value="3º Sargento">3º Sargento</option>
-            <option value="Cabo">Cabo</option>
-            <option value="Soldado 1º Classe">Soldado 1º Classe</option>
-            <option value="Soldado 2º Classe">Soldado 2º Classe</option>
-            <option value="Aluno" selected>Aluno</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="cod0-nome-oficial">Nome do Oficial</label>
-          <input type="text" id="cod0-nome-oficial" placeholder="Ex: João Silva">
-        </div>
-        <button id="add-oficial-btn" class="action-button">Adicionar</button>
-      </div>
-
-      <!-- Lista da Tripulação e Resultados -->
-      <div id="tripulacao-list">
-        <!-- Oficiais adicionados aparecerão aqui dinamicamente -->
-      </div>
-
-      <div class="results-area">
-        <pre id="cod0-output"></pre>
-        <button class="copy-button" data-target="cod0-output" title="Copiar Texto">
-          <i class="fas fa-copy"></i>
-        </button>
       </div>
     </div>
 
@@ -190,29 +196,30 @@
 
             <div id="radio-acompanhamento-tab" class="sub-tab-content active">
               <p><strong>Normas:</strong> Evite modular sobre outros, seja direto e claro, sem linguagem inadequada.</p>
-              <div class="form-grid" style="grid-template-columns: repeat(2, 1fr); gap: 1rem 1.5rem; margin-top: 1.5rem;">
-                <div class="form-group">
+
+              <div id="radio-acompanhamento-grid">
+                <div class="form-group" id="radio-veiculo-group">
                   <label for="radio-veiculo">Veículo</label>
                   <input type="text" id="radio-veiculo" placeholder="Ex: Sentinel">
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="radio-cor-group">
                   <label for="radio-cor">Cor</label>
                   <input type="text" id="radio-cor" placeholder="Ex: Preto">
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="radio-qru-group">
                   <label for="radio-qru">QRU (Ocorrência)</label>
-                  <input type="text" id="radio-qru" placeholder="Ex: Fuga">
+                  <input type="text" id="radio-qru" placeholder="Ex: Fuga, Atitude Suspeita">
                 </div>
-                <div class="form-group autocomplete-wrapper">
+                <div class="form-group autocomplete-wrapper" id="radio-qth-group">
                   <label for="radio-qth">QTH (Local)</label>
                   <input type="text" id="radio-qth" placeholder="Digite para buscar..." autocomplete="off">
                   <div class="autocomplete-suggestions"></div>
                 </div>
-                <div class="form-group">
-                  <label for="radio-qrr-numero">Nº de Unidades (QRR)</label>
+                <div class="form-group" id="radio-qrr-numero-group">
+                  <label for="radio-qrr-numero">Nº de Unidades</label>
                   <input type="number" id="radio-qrr-numero" placeholder="Ex: 2" min="1">
                 </div>
-                <div class="form-group form-group-full-width">
+                <div class="form-group" id="radio-qrr-preferencia-group">
                   <label for="radio-qrr-preferencia">Preferência (QRR)</label>
                   <select id="radio-qrr-preferencia">
                     <option value="SPEED">SPEED</option>
@@ -236,9 +243,7 @@
           </div>
         </div>
 
-        <!-- ================================================== -->
-        <!-- Item 2: CP (Chat Policial) (MODIFICADO COM ABAS)   -->
-        <!-- ================================================== -->
+        <!-- Item 2: CP (Chat Policial) -->
         <div class="accordion-item">
           <button class="accordion-header">
             <span><i class="fa-solid fa-comments"></i> CP (Chat Policial)</span>
@@ -307,9 +312,6 @@
             </div>
           </div>
         </div>
-        <!-- ================================================== -->
-        <!-- FIM DA MODIFICAÇÃO                                 -->
-        <!-- ================================================== -->
 
         <!-- Item 3: Chamados -->
         <div class="accordion-item">
@@ -360,6 +362,7 @@
             </div>
           </div>
         </div>
+
         <!-- Item 4: Demais Meios de Comunicação -->
         <div class="accordion-item">
           <button class="accordion-header">
@@ -367,15 +370,19 @@
             <i class="fa-solid fa-chevron-down icon"></i>
           </button>
           <div class="accordion-content">
-            <!-- Canal /911 -->
-            <div class="comms-channel">
-              <h3 class="comms-channel-title"><i class="fa-solid fa-mobile-screen-button"></i> /911 (Civis)</h3>
-              <p class="comms-channel-description">
-                Canal utilizado para nos comunicarmos com os civis através de texto. Em nosso procedimento para aplicar multas nos veículos abandonados pela cidade, precisamos e devemos contatar o cidadão três vezes através /911 antes de realizar o procedimento.
-              </p>
+            <div class="sub-tabs">
+              <button class="sub-tab-button active" data-tab="comms-911-tab">
+                <i class="fa-solid fa-mobile-screen-button"></i> /911 (Civis)
+              </button>
+              <button class="sub-tab-button" data-tab="comms-112-tab">
+                <i class="fa-solid fa-kit-medical"></i> /112 (Médicos)
+              </button>
+            </div>
 
+            <!-- Aba /911 (Civis) -->
+            <div id="comms-911-tab" class="sub-tab-content active">
               <div class="comms-example">
-                <h4>Exemplo 1: Contato Inicial</h4>
+                <h4>Contato Inicial</h4>
                 <div class="form-group">
                   <label for="911-nome-civil">Nome do Civil</label>
                   <input type="text" id="911-nome-civil" placeholder="Digite o nome do civil...">
@@ -389,7 +396,7 @@
               </div>
 
               <div class="comms-example">
-                <h4>Exemplo 2: Veículo Irregular</h4>
+                <h4>Veículo Irregular</h4>
                 <div class="form-group autocomplete-wrapper">
                   <label for="911-local">Local do Veículo</label>
                   <input type="text" id="911-local" placeholder="Digite para buscar um local..." autocomplete="off">
@@ -404,14 +411,10 @@
               </div>
             </div>
 
-            <!-- Canal /112 -->
-            <div class="comms-channel">
-              <h3 class="comms-channel-title"><i class="fa-solid fa-kit-medical"></i> /112 (Médicos)</h3>
-              <p class="comms-channel-description">
-                Canal utilizado para nos comunicarmos com os médicos através de texto. Antes de realizarmos qualquer procedimento de reanimação, devemos contatar os médicos para saber se os mesmos estão disponíveis para auxiliar ou se estamos autorizados a realizar o procedimento.
-              </p>
+            <!-- Aba /112 (Médicos) -->
+            <div id="comms-112-tab" class="sub-tab-content">
               <div class="comms-example">
-                <h4>Exemplo: Solicitação de Permissão</h4>
+                <h4>Solicitação de Permissão</h4>
                 <div class="template">
                   <pre id="template-112">Os oficiais estão autorizados a realizar os primeiros socorros?</pre>
                   <button class="copy-button" data-copy-target="template-112" title="Copiar Modelo">
@@ -420,7 +423,6 @@
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>

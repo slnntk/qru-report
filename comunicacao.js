@@ -6,6 +6,7 @@
 // Módulos de dados e configuração
 import { loadOfficialConfig, saveOfficialConfig } from './src/modules/officialData.js';
 import pontosDeReferenciaData from './pontos_referencia.json';
+import cargos from './data/cargos.json';
 
 // Módulos de UI e interatividade
 import { initSidebar, initTheme, initAccordion, initServiceCallToggle, initOfficialConfigUI } from './src/modules/ui.js';

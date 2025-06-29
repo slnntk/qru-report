@@ -1,0 +1,31 @@
+{
+  "GIC": [
+    "Operador(a) de Inteligência",
+    "Coordenador(a) da G.I.C"
+  ],
+  "GRA": [
+    "Aspirante a Piloto",
+    "Piloto de Campo",
+    "Piloto Tático",
+    "Piloto de Elite",
+    "Piloto Veterano",
+    "Braço Direito",
+    "Coordenador Do Grupamento"
+  ],
+  "GTM": [
+    "Motopatrulheiro(a) Tático",
+    "Coordenador(a) da G.TM"
+  ],
+  "GOT": [
+    "Operador(a) Tático",
+    "Coordenador(a) da G.O.T"
+  ],
+  "PERICIA": [
+    "Perito(a) Criminal",
+    "Coordenador(a) da Perícia"
+  ],
+  "INSTRUTORES": [
+    "Coordenador(a) de Instrução",
+    "Instrutor(a) de Recrutamento"
+  ]
+}
